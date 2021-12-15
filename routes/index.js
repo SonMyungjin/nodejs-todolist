@@ -5,7 +5,6 @@ const router = express.Router();
 // Todo Router
 const TodoRouter = require('./todo');
 
-
 // Refactoring
 router.use('/todo', TodoRouter);
 

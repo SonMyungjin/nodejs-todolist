@@ -17,11 +17,11 @@ exports.get = function(req, res){
 
 // 작성
 exports.write = async function(req, res){
+    const todoTask = new TodoTask({
+        content: req.body.content,
+        date: moment().format("YYYY-MM-DD HH:mm:ss")
+    });
     try{
-        const todoTask = new TodoTask({
-            content: req.body.content,
-            date: moment().format("YYYY-MM-DD HH:mm:ss")
-        });
         await todoTask.save();
         console.log("==== Success!! Save New TodoTask ====");
         console.table([{id: todoTask._id, content: todoTask.content, date: todoTask.date}]);

@@ -6,16 +6,16 @@ const router = express.Router();
 const controller = require("../controllers/todo");
 
 // Main
-router.get('/', controller.get);
+router.get('/', controller.get); // index에서 /todo 로 라우팅 해줬기 때문에 http://localhost:3000/todo/ 가 이에 해당
 
 // Write
-router.post('/write', controller.write);
+router.post('/write', controller.write); // http://localhost:3000/todo/write
 
 // Edit
 router.get("/edit/:id", controller.edit);
 
 // Update
-router.patch("/update/:id", controller.update);
+router.post("/update/:id", controller.update);
 
 // Remove
 router.get("/remove/:id", controller.remove);
