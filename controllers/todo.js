@@ -25,10 +25,10 @@ exports.write = async function(req, res){
         await todoTask.save();
         console.log("==== Success!! Save New TodoTask ====");
         console.table([{id: todoTask._id, content: todoTask.content, date: todoTask.date}]);
-        res.redirect("/todo");
+        res.redirect("/api/todos");
     }catch(err){
         console.err("==== Fail!! Save TodoTask ====");
-        res.redirect("/todo");
+        res.redirect("/api/todos");
     } 
 };
 
@@ -39,31 +39,29 @@ exports.edit = function(req, res){
         res.render("todo-edit", { todoTasks: tasks, idTask: id });
     });
 };
-
+   
 // 수정
 exports.update = function(req, res){
     const id = req.params.id;
-    TodoTask.findByIdAndUpdate(id, { content: req.body.content }, err => {
+    TodoTask.findByIdAndUpdate(id, { content: req.body.content }, (err) => {
         if(err){
             console.log("==== Fail!! Update TodoTask ====");
             console.error(err);
         }
         console.log("==== Success!! Update TodoTask ====");
         console.log("id: " + id + "\nchanged content: " + req.body.content);
-        res.redirect("/todo");
+        res.json({ ok: true, redirectUrl: "/api/todos" });  
     });
 }
 
 //삭제
-exports.remove = function(req, res){
+exports.remove = function(req, res) {
     const id = req.params.id;
-    TodoTask.findByIdAndRemove(id, err => {
+    TodoTask.findByIdAndRemove(id, (err) => {
         if(err){
-            console.log("==== Fail!! Remove TodoTask ====")
             console.error(err);
-        }
-        console.log("==== Success!! Remove TodoTask ====");
+        }  
         console.log("id: " + id);
-        res.redirect("/todo");
+        res.json({ ok: true, redirectUrl: "/api/todos" });
     });  
 };

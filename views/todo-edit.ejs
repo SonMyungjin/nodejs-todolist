@@ -3,16 +3,18 @@
 <head>
     <title>TODO EDIT</title>
     <link rel="stylesheet" type="text/css" href="/public/stylesheets/todo.css">
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link rel='stylesheet' href='//cdn.jsdelivr.net/npm/font-kopub@1.0/kopubdotum.min.css'>
 </head>
 <body>
     <div class="home">
-        <button type="button" id="img" onclick="location.href='/'">
-            <img src="../../public/images/home.png" width="70">
+        <button type="button" id="img" onclick="location.href='/api/todos'">
+            <img src="/public/images/home.png" width="70">
         </button>
     </div>
     <h1 class="main-text">TODO LIST</h1>
     <hr><br>
-    <form action="/todo/write" method="post" class="form-box">
+    <form action="/api/todos/write" method="post" class="form-box">
         <input type="text" class="text-box" placeholder="Enter todo" name="content">
         <button type="submit" class="btn">Write</button>
     </form>
@@ -31,15 +33,16 @@
                 </li>
         <% } if(tasks._id == idTask) { %>
             <li class="todo-item">
-              <form action="/todo/update/<%= tasks._id %>" method="post">
                 <input type="text" value="<%= tasks.content %>" name="content" id="edit-box" autocomplete="off">
-                <button type="submit" id="img">
+                <button 
+                    type="button"
+                    id="img"
+                    onclick="todoComponent.update('<%= tasks._id %>')">
                     <img src="/public/images/submit.png" width="25px">
                 </button>
-                <button type="button" id="img" onclick="location.href='/todo'">
+                <button type="button" id="img" onclick="location.href='/api/todos'">
                     <img src="/public/images/remove.png" width="20px">
                 </button>
-              </form>
             </li>
               <% } else { %>
             <li class="todo-item">
@@ -55,5 +58,22 @@
             </li>
         <% }}); %>
     </ul>
+    <script>
+        const todoComponent = {
+            update(taskId) {
+                fetch(`http://localhost:3000/api/todos/${taskId}`, {
+                    method: "PATCH",
+                })
+                    .then((response) => {
+                        if (response.ok) {
+                            return response.json();
+                        }
+                    })
+                    .then(({ redirectUrl }) => {
+                        location.href = redirectUrl;
+                    });
+            },
+        };
+    </script>
 </body>
 </html>

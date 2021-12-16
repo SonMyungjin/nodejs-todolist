@@ -8,13 +8,13 @@
 </head>
 <body>
     <div class="home">
-        <button type="button" id="img" onclick="location.href='/'">
+        <button type="button" id="img" onclick="location.href='/api/todos'">
             <img src="../public/images/home.png" width="70">
         </button>
     </div>
     <h1 class="main-text">TODO LIST</h1>
     <hr><br>
-    <form action="/todo/write" method="post" class="form-box">
+    <form action="/api/todos/write" method="post" class="form-box">
         <input type="text" class="text-box" placeholder="Enter todo" name="content" autocomplete="off">
         <button type="submit" class="btn">Write</button>
     </form>
@@ -35,11 +35,40 @@
             <li class="todo-item">
                 <div class="todo-item-content" id="content">&emsp;<%= tasks.content %> &emsp; </div>
                 <div class="edit-btn">
-                    <button type="button" id="img" onclick="location.href='/todo/edit/<%= tasks._id %>'"><img src="../public/images/edit.png" width="20px"></button>
-                    <button type="button" id="img" onclick="location.href='/todo/remove/<%= tasks._id %>'"><img src="../public/images/remove.png" width="20px"></button>
+                    <button 
+                        type="button" 
+                        id="img" 
+                        onclick="location.href='/api/todos/edit/<%= tasks._id %>'">
+                        <img src="../public/images/edit.png" width="20px">
+                    </button>
+                    
+                    <button 
+                        type="button" 
+                        id="img" 
+                        onclick="todoComponent.remove('<%= tasks._id %>')">
+                        <img src="../public/images/remove.png" width="20px">
+                    </button>
                 </div>
             </li>
         <% }); %>
     </ul>
+    <script>
+        const todoComponent = {
+            remove(taskId) {
+                fetch(`http://localhost:3000/api/todos/${taskId}`, {
+                    method: "DELETE",
+                })
+                    .then((response) => {
+                        if (response.ok) {
+                            return response.json();
+                        }
+                    })
+                    .then(({ redirectUrl }) => {
+                        location.href = redirectUrl;
+                    });
+            },
+        };
+    </script>
 </body>
 </html>
+
